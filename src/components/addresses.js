@@ -4,6 +4,7 @@ var address1 = ""
 var address2 = ""
 const GOOGLE_API_KEY = "AIzaSyCHGt6967ispOV3GgP_sG_np-07B9yYtBU"
 const GOOGLE_GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
+var count = 0;
 const formatAddress = (address) => {
     let exp = /[\/\\^$*+?()|[\]{}]/g;
     if (exp.test(address)){
@@ -18,25 +19,19 @@ class Addresses extends Component{
     constructor(props){
         super(props)
         this.state = {
-            coordinate1 : {
-                lat:'',
-                lng:''
-            },
-            coordinate2: {
-                lat:'',
-                lng:''
-            },
+            coordinate1:'',
+            coordinate2: '',
             error : ""
         }
     }
     
-    addAddress = (event, i) => {
+    addAddress = (event) => {
         if(this.state.error !== ""){
             this.setState({
                 error: ""
             })
         }
-        if(i === 1){
+        if(event.target.id === "1"){
             address1 = event.target.value
         }else{
             address2 = event.target.value
@@ -53,12 +48,6 @@ class Addresses extends Component{
         }
         this.getCoordinate(address1, 1)
         this.getCoordinate(address2, 2)
-        // if(response.status !== "OK"){
-        //     this.setState({
-        //         error: "Having trouble getting coordinates"
-        //     })
-        //     return
-        // }else{console.log(response.geometry.location)} 
     }
 
     getCoordinate = (address, index) => {
@@ -70,23 +59,28 @@ class Addresses extends Component{
             if(json.status === "OK"){
                 if(index === 1){
                     this.setState({
-                        coordinate1: json.results[0].geometry.location
-                    },this.checkState)
+                        coordinate1 : json.results[0].geometry.location
+                    },() => this.agencyChange())
                 }else{
                     this.setState({
-                        coordinate2: json.results[0].geometry.location
-                    },this.checkState)
+                        coordinate2 : json.results[0].geometry.location
+                    },() => this.agencyChange())
                 }
             }else{
                 this.setState({
-                    error: "Having trouble requesting coordinates"
+                    error: `Having trouble requesting coordinates of Address ${index}`
                 })
             }
         })
     }
 
-    checkState = () => {
-        console.log(this.state)
+    agencyChange = () => {
+        if(count%2 === 1){
+            count = 0;
+            this.props.agencyChange([this.state.coordinate1, this.state.coordinate2])
+        }
+        count++;
+        //this.props.agencyChange()
     }
     
     render(){
@@ -94,13 +88,13 @@ class Addresses extends Component{
         <div>
             <form className="form-control" >
                 <label> Agency1 address
-                    <input type="text" onChange={event => this.addAddress(event,1)}/>
+                    <input id="1" type="text" onChange={event => this.addAddress(event)}/>
                 </label>
                 <label> Agency2 address
-                    <input type="text" onChange={event => this.addAddress(event,2)} />
+                    <input id="2" type="text" onChange={event => this.addAddress(event)} />
                 </label>
+                <span><button className="btn btn-primary" onClick={event => this.handleConfirm(event)}>Confirm</button></span>
             </form>
-            <span><button className="btn btn-primary" onClick={event => this.handleConfirm(event)}>Confirm</button></span>
             {this.state.error !== "" && 
                 <div className="alert alert-danger">
                     <p>{this.state.error}</p>
