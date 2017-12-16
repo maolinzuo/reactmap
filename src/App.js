@@ -25,7 +25,7 @@ class App extends Component {
         },
         agencies:[],
         selectedAgency:'',
-        markers:[]
+        markers:[{},{},{}]
     }
     this.agencyChange = this.agencyChange.bind(this)
     this.agencyClicked = this.agencyClicked.bind(this)
@@ -48,8 +48,9 @@ class App extends Component {
               lat: coordinates[1].lat,
               lng: coordinates[1].lng
             }
-          } 
-      ] 
+          },
+          {}
+      ]
     
     })
 
@@ -103,13 +104,13 @@ class App extends Component {
 
   agencyClicked = (agency) => {
     let markers = this.state.markers
-    markers.push({
+    markers[3] = {
       position :{
         lat:agency.geometry.location.lat,
         lng: agency.geometry.location.lng,
       },
       icon:"http://localhost:3000/home_icon.png"
-    })
+    }
     this.setState({
       selectedAgency: agency,
       markers: markers
