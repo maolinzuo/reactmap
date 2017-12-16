@@ -15,6 +15,10 @@ const formatAddress = (address) => {
 
 }
 
+const inputStyle ={
+    padding: "10px"
+}
+
 class Addresses extends Component{
     constructor(props){
         super(props)
@@ -82,14 +86,14 @@ class Addresses extends Component{
     render(){
         return(
         <div>
-            <form className="form-control" >
-                <label> Agency1 address
+            <form className="form-group form-group-lg" >
+                <label style={inputStyle}> Address1 &nbsp;
                     <input id="1" type="text" onChange={event => this.addAddress(event)}/>
                 </label>
-                <label> Agency2 address
-                    <input id="2" type="text" onChange={event => this.addAddress(event)} />
+                <label style={inputStyle}> Address2 &nbsp;
+                    <input id="2" type="text" onChange={event => this.addAddress(event)}  />
                 </label>
-                <span><button className="btn btn-primary" onClick={event => this.handleConfirm(event)}>Confirm</button></span>
+                <button className="btn btn-default btn-sm" onClick={event => this.handleConfirm(event)} >Confirm</button>
             </form>
             {this.state.error !== "" && 
                 <div className="alert alert-danger">

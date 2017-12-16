@@ -120,13 +120,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Addresses agencyChange={this.agencyChange} />
+        <center>
+          <Addresses agencyChange={this.agencyChange} />
+        </center>
         <Grid>
           <Row>
-            <Col xs={5} md={5}>
+            <Col xs={6} md={6}>
               <Map markers={this.state.markers} />
             </Col>
-            <Col xs={5} md={5}>
+            <Col xs={6} md={6}>
               <Table agencies={this.state.agencies} agencyClicked={this.agencyClicked}/>
             </Col>
           </Row>
