@@ -1,48 +1,44 @@
 import React from 'react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
 
 class Table extends React.Component{
     constructor(props){
         super(props)
         this.state = {
             agencies:[],
-            addresses: []
         }
-    }
+        this.agencyClicked = this.props.agencyClicked.bind(this)
+        this.options = {
+                onRowDoubleClick : function(row){
+                    this.handleClick(row)
+                }.bind(this)
+            }
+        }
+    
 
     componentWillReceiveProps(nextProps){
-        console.log(nextProps)
         this.setState({
-            agencies: nextProps.agencies,
-            addresses: nextProps.addresses
+            agencies: nextProps.agencies
         })
+    }
+
+    handleClick = (agency) => {
+        this.agencyClicked(agency)
     }
 
     render(){
         return (
-            <div>
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Total Distance to both Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.agencies.map((agency,index) => {
-                            return(
-                                <tr key={index}>
-                                    <th scope="row">{index+1}</th>
-                                    <td>{agency.name}</td>
-                                    <td>{agency.vicinity}</td>
-                                    <td>{agency.totalDistance}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-            </div>
+        <div>
+            <BootstrapTable
+                data={ this.state.agencies }
+                pagination
+                options={this.options }>
+                <TableHeaderColumn dataField='name' isKey>Name</TableHeaderColumn>
+                <TableHeaderColumn dataField='vicinity'>Address</TableHeaderColumn>
+                <TableHeaderColumn dataField='totalDistance'>Total Distance(m)</TableHeaderColumn>
+            </BootstrapTable>
+      </div>
         )
     }
 

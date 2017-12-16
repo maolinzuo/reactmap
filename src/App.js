@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Addresses from './components/addresses';
 import Table from './components/table'
+import Map from './components/mapWrapper'
 import Utility from './utils/utility'
+
 
 const GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
 const GOOGLE_API_KEY = "AIzaSyCHGt6967ispOV3GgP_sG_np-07B9yYtBU"
@@ -21,17 +23,37 @@ class App extends Component {
           lat: '',
           lng: ''
         },
-        agencies:[]
+        agencies:[],
+        selectedAgency:'',
+        markers:[]
     }
     this.agencyChange = this.agencyChange.bind(this)
+    this.agencyClicked = this.agencyClicked.bind(this)
   }
 //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&type=restaurant&keyword=cruise&key=YOUR_API_KEY
 
   agencyChange = (coordinates) => {
     this.setState({
       coordinate1: coordinates[0],
-      coordinate2: coordinates[1]
+      coordinate2: coordinates[1],
+      markers :
+        [{
+            position:{
+              lat: coordinates[0].lat,
+              lng: coordinates[0].lng
+            }
+          },
+          {
+            position:{
+              lat: coordinates[1].lat,
+              lng: coordinates[1].lng
+            }
+          } 
+      ] 
+    
     })
+
+    idSet.clear()
     Promise.all([this.getNearByAgencies(coordinates[0]), this.getNearByAgencies(coordinates[1])])
     .then((json) => {
       // if(json[0].status !== "OK"){
@@ -79,11 +101,26 @@ class App extends Component {
   }
 
 
+  agencyClicked = (agency) => {
+    let markers = this.state.markers
+    markers.push({
+      position :{
+        lat:agency.geometry.location.lat,
+        lng: agency.geometry.location.lng,
+      },
+      icon:"http://localhost:3000/home_icon.png"
+    })
+    this.setState({
+      selectedAgency: agency,
+      markers: markers
+    },)
+  }
   render() {
     return (
       <div className="App">
         <Addresses agencyChange={this.agencyChange} />
-        <Table agencies={this.state.agencies} addresses={[this.state.coordinate1, this.state.coordinate2]}/>
+        <Table agencies={this.state.agencies} agencyClicked={this.agencyClicked}/>
+        <Map markers={this.state.markers} />
       </div>
     );
   }
