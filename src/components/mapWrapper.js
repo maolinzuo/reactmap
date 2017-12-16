@@ -23,7 +23,7 @@ class Map extends Component {
               <MapComponent
               googleMapURL={URL_GOOGLE_API}
               loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `600px` }} />}
+              containerElement={<div style={{ width:'100%', height: `600px` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               markers={this.state.markers}
               onMarkerClick={this.handleMarkerClick}

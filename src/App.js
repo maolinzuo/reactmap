@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 import Addresses from './components/addresses';
 import Table from './components/table'
 import Map from './components/mapWrapper'
@@ -120,8 +121,16 @@ class App extends Component {
     return (
       <div className="App">
         <Addresses agencyChange={this.agencyChange} />
-        <Table agencies={this.state.agencies} agencyClicked={this.agencyClicked}/>
-        <Map markers={this.state.markers} />
+        <Grid>
+          <Row>
+            <Col xs={5} md={5}>
+              <Map markers={this.state.markers} />
+            </Col>
+            <Col xs={5} md={5}>
+              <Table agencies={this.state.agencies} agencyClicked={this.agencyClicked}/>
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
