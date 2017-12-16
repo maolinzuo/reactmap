@@ -46,41 +46,37 @@ class Addresses extends Component{
             })
             return
         }
-        this.getCoordinate(address1, 1)
-        this.getCoordinate(address2, 2)
-    }
-
-    getCoordinate = (address, index) => {
-        const formattedAddress = formatAddress(address)
-        let url = `${GOOGLE_GEOCODE_URL}?address=${formattedAddress}&key=${GOOGLE_API_KEY}`
-        fetch(url, {method: 'GET',})
-        .then(response => response.json())
+        Promise.all([this.getCoordinate(address1)
+            ,this.getCoordinate(address2)])
         .then(json => {
-            if(json.status === "OK"){
-                if(index === 1){
-                    this.setState({
-                        coordinate1 : json.results[0].geometry.location
-                    },() => this.agencyChange())
-                }else{
-                    this.setState({
-                        coordinate2 : json.results[0].geometry.location
-                    },() => this.agencyChange())
-                }
+            if(json[0].status !== "OK"){
+                this.setState({
+                    error: `Having trouble requesting coordinates of Address 1`
+                })
+            }
+            else if(json[1].status !== "OK"){
+                this.setState({
+                    error: `Having trouble requesting coordinates of Address 2`
+                })
             }else{
                 this.setState({
-                    error: `Having trouble requesting coordinates of Address ${index}`
+                    coordinate1 : json[0].results[0].geometry.location,
+                    coordinate2 : json[1].results[0].geometry.location
                 })
             }
         })
+        .then(() => {
+            console.log(this.state.coordinate1);
+            console.log(this.state.coordinate2);
+            this.props.agencyChange([this.state.coordinate1, this.state.coordinate2])
+        })
     }
 
-    agencyChange = () => {
-        if(count%2 === 1){
-            count = 0;
-            this.props.agencyChange([this.state.coordinate1, this.state.coordinate2])
-        }
-        count++;
-        //this.props.agencyChange()
+    getCoordinate = (address) => {
+        const formattedAddress = formatAddress(address)
+        let url = `${GOOGLE_GEOCODE_URL}?address=${formattedAddress}&key=${GOOGLE_API_KEY}`
+        return fetch(url, {method: 'GET',})
+            .then(response => response.json())
     }
     
     render(){
