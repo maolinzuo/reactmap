@@ -10,8 +10,10 @@ class Table extends React.Component{
         }
         this.agencyClicked = this.props.agencyClicked.bind(this)
         this.options = {
+                //double clicked the row and inform parent components
                 onRowDoubleClick : function(row){
                     this.handleClick(row)
+                    console.log(row)
                 }.bind(this)
             }
         }

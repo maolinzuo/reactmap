@@ -14,6 +14,7 @@ const idSet = new Set();
 const URL = "https://fywszb86k8.execute-api.us-east-1.amazonaws.com/test"
 
 class App extends Component {
+
   constructor(){
     super()
     this.state = {
@@ -55,7 +56,9 @@ class App extends Component {
     
     })
 
+    // clear the set when making new request
     idSet.clear()
+    //make sure two http requests finishes before next move
     Promise.all(
       [this.getNearByAgencies(coordinates[0]), this.getNearByAgencies(coordinates[1])]
     )
@@ -74,17 +77,18 @@ class App extends Component {
                           agency["totalDistance"] = agency.distanceToAgency1 + agency.distanceToAgency2
                           return agency
                           })
+        // if the agency's id exists in the set, this agency is a duplicate
         let agencies2 = json[1].results.filter((agency) => {
-          //if(idSet.has(agency.id)) return;
           agency["distanceToAgency1"] = Utility.calculateDistance(agency.geometry.location, this.state.coordinate1)
           agency["distanceToAgency2"] = Utility.calculateDistance(agency.geometry.location, this.state.coordinate2)
           agency["totalDistance"] = agency.distanceToAgency1 + agency.distanceToAgency2
           return !idSet.has(agency.id)
          })
-         agencies = agencies1.concat(agencies2);
-          agencies.sort(function(a, b){
+
+        agencies = agencies1.concat(agencies2);
+        agencies.sort(function(a, b){
             return a.totalDistance - b.totalDistance
-          })
+        })
 
         this.setState({
           agencies: agencies
@@ -92,6 +96,7 @@ class App extends Component {
     }})
   }
 
+  //http request to get nearby places and return a promise
   getNearByAgencies = (coordinate, index) => {
     return fetch(URL
       ,{
@@ -114,6 +119,8 @@ class App extends Component {
   }
 
 
+  // when client double clicked in the list, the marker represents
+  // the corresponding agency will show in the map
   agencyClicked = (agency) => {
     let markers = this.state.markers
     markers[3] = {
@@ -126,13 +133,15 @@ class App extends Component {
     this.setState({
       selectedAgency: agency,
       markers: markers
-    },)
+    })
   }
+
+
   render() {
     return (
       <div className="App">
         <center>
-        <Header/>
+          <Header/>
           <Addresses agencyChange={this.agencyChange} />
         </center>
         <Grid>

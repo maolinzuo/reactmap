@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 var address1 = ""
 var address2 = ""
@@ -83,6 +83,7 @@ class Addresses extends Component{
     }
     
     render(){
+
         return(
         <div>
             <form className="form-group form-group-lg" >
