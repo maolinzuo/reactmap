@@ -60,7 +60,6 @@ class App extends Component {
       [this.getNearByAgencies(coordinates[0]), this.getNearByAgencies(coordinates[1])]
     )
     .then((response) => {
-        console.log(response)
         let json = [JSON.parse(response[0]) ,JSON.parse(response[1])]
         if(json[0].status !== "OK"){
           alert(`Error of Address1: ${json[0].status}`)
@@ -76,11 +75,11 @@ class App extends Component {
                           return agency
                           })
         let agencies2 = json[1].results.filter((agency) => {
-          if(idSet.has(agency.id)) return;
+          //if(idSet.has(agency.id)) return;
           agency["distanceToAgency1"] = Utility.calculateDistance(agency.geometry.location, this.state.coordinate1)
           agency["distanceToAgency2"] = Utility.calculateDistance(agency.geometry.location, this.state.coordinate2)
           agency["totalDistance"] = agency.distanceToAgency1 + agency.distanceToAgency2
-          return agency
+          return !idSet.has(agency.id)
          })
          agencies = agencies1.concat(agencies2);
           agencies.sort(function(a, b){
@@ -109,6 +108,7 @@ class App extends Component {
         })
       })
     .then(response => response.json())
+    .catch(error => console.log(error))
     
 
   }
