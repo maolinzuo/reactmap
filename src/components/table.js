@@ -36,7 +36,7 @@ class Table extends React.Component{
                 options={this.options }>
                 <TableHeaderColumn dataField='name' isKey>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='vicinity'>Address</TableHeaderColumn>
-                <TableHeaderColumn dataField='totalDistance'>Total Distance(m)</TableHeaderColumn>
+                <TableHeaderColumn dataField='totalDistance'>Distance(m)</TableHeaderColumn>
             </BootstrapTable>
       </div>
         )

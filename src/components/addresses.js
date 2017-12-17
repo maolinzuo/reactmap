@@ -4,7 +4,6 @@ var address1 = ""
 var address2 = ""
 const GOOGLE_API_KEY = "AIzaSyCHGt6967ispOV3GgP_sG_np-07B9yYtBU"
 const GOOGLE_GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
-var count = 0;
 const formatAddress = (address) => {
     let exp = /[\/\\^$*+?()|[\]{}]/g;
     if (exp.test(address)){

@@ -11,20 +11,13 @@ class Utility{
             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c;
-        return d;
+        return Math.round(d);
        
     }
 
     static  degToRad = (deg) => {
         return deg * Math.PI /180;
     }
-
-    static sort = (array) => {
-        return array.sort((a, b) =>{
-            return a.totalDistance - b.totalDistance
-        })
-    }
-
 
 }
 
