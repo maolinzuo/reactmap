@@ -2,7 +2,9 @@ import React from 'react';
 
 const Header = () => {
     return (
-        <img alt="amne_log" src = "https://webassets.amne.co/3.0/AmneLogo.png"/>
+        <div style={{width:"50%",height:"20px"}}>
+            <img  alt="amne_logo" src = "https://webassets.amne.co/3.0/AmneLogo.png"/>
+        </div>
     )
 }
 

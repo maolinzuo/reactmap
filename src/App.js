@@ -145,7 +145,7 @@ class App extends Component {
           <Addresses agencyChange={this.agencyChange} />
         </center>
         <Grid>
-          <Row>
+          <Row style={{height: '70%'}}>
             <Col xs={6} md={6}>
               <Map markers={this.state.markers} />
             </Col>
